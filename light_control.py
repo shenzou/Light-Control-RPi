@@ -29,7 +29,7 @@ class MyGrid(GridLayout):
         self.add_widget(self.toggleState)
 
         self.brightSlider = Slider(min=0, max=100, value=50)
-        self.brightSlider.bind(on_value=self.change_brightness)
+        self.brightSlider.fbind('value', self.change_brightness)
         self.add_widget(self.brightSlider)
 
         # self.add_widget(Label(text="Email: "))
@@ -77,16 +77,18 @@ class MyGrid(GridLayout):
         light2 = Bulb("192.168.0.49")
         print("Changed to Salon")
         
-    def change_brightness(self, instance):
-        # try:
-        #     print("Changing brightness: ", brightness)
-        #     if(light != None):
-        #         light.set_brightness(int(brightness))
-        #     if(light2 != None):
-        #         light2.set_brightness(int(brightness))
-        # except:
-        #     pass
-        print(self)
+    def change_brightness(self, instance, val):
+        try:
+            print("Changing brightness: ", int(val))
+            if(light != None):
+                light.set_brightness(int(val))
+            if(light2 != None):
+                light2.set_brightness(int(val))
+            self.toggleState.text = "Résultat: [color=00FF00]OK ![/color]"
+        except:
+            self.toggleState.text = 'Résultat: [color=ff0000]Echec ![/color]'
+            pass
+        
         
 
 class MyApp(App):
