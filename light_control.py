@@ -8,6 +8,10 @@ from kivy.uix.slider import Slider
 
 from yeelight import Bulb, discover_bulbs
 
+import vars
+
+       
+
 class MyGrid(GridLayout):
     def __init__(self, **kwargs):
         super(MyGrid, self).__init__(**kwargs)
@@ -25,12 +29,13 @@ class MyGrid(GridLayout):
         self.toggle.bind(on_press=self.toggle_light)
         self.add_widget(self.toggle)
 
-        self.toggleState = Label(text="Résultat: ", markup = True)
-        self.add_widget(self.toggleState)
+        global toggleState
+        toggleState = Label(text="Résultat: ", markup = True)
+        self.add_widget(toggleState)
 
-        self.brightSlider = Slider(min=0, max=100, value=50)
-        self.brightSlider.fbind('value', self.change_brightness)
-        self.add_widget(self.brightSlider)
+
+        self.add_widget(LumGrid())
+        self.add_widget(RGBGrid())
 
         # self.add_widget(Label(text="Email: "))
         # self.email = TextInput(multiline=False)
@@ -50,6 +55,7 @@ class MyGrid(GridLayout):
     light = None
     light2 = None
 
+
     def toggle_light(self, instance):
         try:
             if(light != None):
@@ -57,9 +63,9 @@ class MyGrid(GridLayout):
             if(light2 != None):
                 light2.toggle()
             print("Changed light state.")
-            self.toggleState.text = "Résultat: [color=00FF00]OK ![/color]"
+            toggleState.text = "Résultat: [color=00FF00]OK ![/color]"
         except:
-            self.toggleState.text = 'Résultat: [color=ff0000]Echec ![/color]'
+            toggleState.text = 'Résultat: [color=ff0000]Echec ![/color]'
             pass
         
         
@@ -77,6 +83,18 @@ class MyGrid(GridLayout):
         light2 = Bulb("192.168.0.49")
         print("Changed to Salon")
         
+    
+
+class LumGrid(GridLayout):
+    def __init__(self):
+        GridLayout.__init__(self, cols=1, rows=2)
+
+        self.brightLabel = Label(text="Luminosité")
+        self.add_widget(self.brightLabel)
+        self.brightSlider = Slider(min=0, max=100, value=50)
+        self.brightSlider.fbind('value', self.change_brightness)
+        self.add_widget(self.brightSlider)
+
     def change_brightness(self, instance, val):
         try:
             print("Changing brightness: ", int(val))
@@ -84,12 +102,85 @@ class MyGrid(GridLayout):
                 light.set_brightness(int(val))
             if(light2 != None):
                 light2.set_brightness(int(val))
-            self.toggleState.text = "Résultat: [color=00FF00]OK ![/color]"
+            toggleState.text = "Résultat: [color=00FF00]OK ![/color]"
         except:
-            self.toggleState.text = 'Résultat: [color=ff0000]Echec ![/color]'
+            toggleState.text = 'Résultat: [color=ff0000]Echec ![/color]'
+            pass
+
+
+class RGBGrid(GridLayout):
+
+    def __init__(self):
+        GridLayout.__init__(self, cols=1, rows=6)
+
+        if(vars.red == None): 
+            vars.red = 255
+        if(vars.green == None): 
+            vars.green = 255
+        if(vars.blue == None): 
+            vars.blue = 255
+
+        self.redSlider = Slider(min=0, max=255, value=vars.red)
+        self.redSlider.fbind('value', self.change_red)
+        self.greenSlider = Slider(min=0, max=255, value=vars.green)
+        self.greenSlider.fbind('value', self.change_green)
+        self.blueSlider = Slider(min=0, max=255, value=vars.blue)
+        self.blueSlider.fbind('value', self.change_blue)
+
+        self.redText = Label(text="Rouge", markup = True)
+        self.add_widget(self.redText)
+        self.add_widget(self.redSlider)
+
+        self.greenText = Label(text="Vert", markup = True)
+        self.add_widget(self.greenText)
+        self.add_widget(self.greenSlider)
+
+        self.blueText = Label(text="Bleu", markup = True)
+        self.add_widget(self.blueText)
+        self.add_widget(self.blueSlider)
+
+        
+
+    def change_blue(self, instance, val):
+        try:
+            vars.blue = val
+            if(light != None):
+                light.set_rgb(int(vars.red), int(vars.green), int(vars.blue))
+            if(light2 != None):
+                light2.set_rgb(int(vars.red), int(vars.green), int(vars.blue))
+            toggleState.text = "Résultat: [color=00FF00]OK ![/color]"
+            print(vars.red, vars.green, vars.blue)
+        except:
+            toggleState.text = 'Résultat: [color=ff0000]Echec ![/color]'
             pass
         
-        
+
+    def change_green(self, instance, val):
+        try:
+            vars.green = val
+            if(light != None):
+                light.set_rgb(int(vars.red), int(vars.green), int(vars.blue))
+            if(light2 != None):
+                light2.set_rgb(int(vars.red), int(vars.green), int(vars.blue))
+            toggleState.text = "Résultat: [color=00FF00]OK ![/color]"
+            print(vars.red, vars.green, vars.blue)
+        except:
+            toggleState.text = 'Résultat: [color=ff0000]Echec ![/color]'
+            pass
+
+
+    def change_red(self, instance, val):
+        try:
+            vars.red = val
+            if(light != None):
+                light.set_rgb(int(vars.red), int(vars.green), int(vars.blue))
+            if(light2 != None):
+                light2.set_rgb(int(vars.red), int(vars.green), int(vars.blue))
+            toggleState.text = "Résultat: [color=00FF00]OK ![/color]"
+            print(vars.red, vars.green, vars.blue)
+        except:
+            toggleState.text = 'Résultat: [color=ff0000]Echec ![/color]'
+            pass
 
 class MyApp(App):
     def build(self):
