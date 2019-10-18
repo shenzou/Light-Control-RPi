@@ -3,8 +3,8 @@ A small script to control Xiaomi Yeelights from a GUI in Python.
 
 This script uses the following libraries:
 - ~~guizero: A quick and simple Python library to create basic GUIs~~
-- kivy: A python library to create GUIs
-- yeelight: A library to control Xiaomi Yeelights.
+- [kivy](https://github.com/kivy/kivy): A python library to create GUIs
+- [yeelight](https://gitlab.com/stavros/python-yeelight): A library to control Xiaomi Yeelights.
 
 ## What to do first
 Before this script can work, you have to replace lights IPs on it.
