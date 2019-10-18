@@ -15,3 +15,4 @@ Install guizero and yeelight using pip3
 - Switch between different rooms
 - Toggle lights of each room (On / Off)
 - Change luminosity (Due to the Yeelight restrictions, you may be limited in number of luminosity changes per minute)
+- Change RGB colors
